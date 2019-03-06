@@ -1,0 +1,31 @@
+package com.yychatclient;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.wat.event.ActionListener;
+
+import javax.swing.*;
+
+public class FriendList extends JFrame implements ActionListener{//¶¥²ãÈÝÆ÷
+	CardLayout cardLayout;//¿¨Æ¬²¼¾Ö
+	
+	JPanel myFriendPanel;
+	JButton myFriendJButton;
+	
+	JPanel myStrangerBlackListJPanel;
+	JButton myStrangerJButton;
+	
+	JPanel myStrangerPanel;
+	
+	JPanel myFriendStrangerPanel;
+	JButton myFriendJButton1;
+	JButton myStrangerJButton1;
+	
+	JButton blackListJButton1;
+	
+
+	public FriendList() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

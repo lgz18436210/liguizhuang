@@ -44,8 +44,7 @@ public class StartServer {
 			ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
 			oos.writeObject(mess);
 			
-			//在这里接受聊天，可不可以？不可以，应该新建一个接受线程
-			new ServerReceiverThread(s).start();//就绪
+			//在这里接受聊天，可不可以？
 		}
 		
 	} catch (IOException | ClassNotFoundException e) {

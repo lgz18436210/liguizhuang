@@ -70,7 +70,6 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//单继
 		mess.setContent(jtf.getText());
 		mess.setMessageType(Message.message_Common);
 		ObjectOutputStream oos;
-		Throwable e;
 		try {
 			oos = new ObjectOutputStream(ClientConnect.s.getOutputStream());
 			oos.writeObject(mess);
@@ -84,8 +83,8 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//单继
 				 * System.out.println(showMessage); jta.append(showMessage+"\r\n");
 				 */
 			
-		} catch (IOException  e1) {
-			e1.printStackTrace();
+		} catch (IOException | e) {
+			e.printStackTrace();
 		}
 		
 		}
@@ -95,18 +94,15 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//单继
 	@Override
 	public void run() {
 		ObjectInputStream ois;
-		while(true) {
-			try {
-				ois = new ObjectInputStream(ClientConnect.s.getInputStream());
-				Message mess=(Message)ois.readObject();//接受聊天信息
-				String showMessage=mess.getSender()+"对"+mess.getReceiver()+"说："+mess.getContent();
-				System.out.println(showMessage);
-				jta.append(showMessage+"\r\n");
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+		try {
+			ois = new ObjectInputStream(ClientConnect.s.getInputStream());
+			Message mess=(Message)ois.readObject();//接受聊天信息
+			String showMessage=mess.getSender()+"对"+mess.getReceiver()+"说："+mess.getContent();
+			System.out.println(showMessage);
+			jta.append(showMessage+"\r\n");
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
-		
 		
 		
 	}

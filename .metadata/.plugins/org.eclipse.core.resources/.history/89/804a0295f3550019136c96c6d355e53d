@@ -12,7 +12,7 @@ import javax.swing.*;
 import com.yychat.model.Message;
 import com.yychatclient.controller.ClientConnect;
 
-public class FriendChat extends JFrame implements ActionListener,Runnable{//单继承
+public class FriendChat extends JFrame implements ActionListener{
 
 	//Center部分
 	JScrollPane jsp;
@@ -59,7 +59,7 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//单继
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {//事件处理代码
+	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource()==jb) {
 			jta.append(jtf.getText()+"\r\n");
 		
@@ -70,44 +70,23 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//单继
 		mess.setContent(jtf.getText());
 		mess.setMessageType(Message.message_Common);
 		ObjectOutputStream oos;
-		Throwable e;
 		try {
 			oos = new ObjectOutputStream(ClientConnect.s.getOutputStream());
 			oos.writeObject(mess);
 			
 			//能不能在这里接受其他人发来的聊天信息？
-				/*
-				 * ObjectInputStream ois = new
-				 * ObjectInputStream(ClientConnect.s.getInputStream());
-				 * mess=(Message)ois.readObject();//接受聊天信息 String
-				 * showMessage=mess.getSender()+"对"+mess.getReceiver()+"说："+mess.getContent();
-				 * System.out.println(showMessage); jta.append(showMessage+"\r\n");
-				 */
+			ObjectInputStream ois = new ObjectInputStream(ClientConnect.s.getInputStream());
+			mess=(Message)ois.readObject();//接受聊天信息
 			
-		} catch (IOException  e1) {
-			e1.printStackTrace();
+			System.out.println(mess.getSender()+"对"+mess.getReceiver()+"说："+mess.getContent());
+			jta.append(jtf.getText()+"\r\n");
+			
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 		
 		}
 			
-		
-	}
-	@Override
-	public void run() {
-		ObjectInputStream ois;
-		while(true) {
-			try {
-				ois = new ObjectInputStream(ClientConnect.s.getInputStream());
-				Message mess=(Message)ois.readObject();//接受聊天信息
-				String showMessage=mess.getSender()+"对"+mess.getReceiver()+"说："+mess.getContent();
-				System.out.println(showMessage);
-				jta.append(showMessage+"\r\n");
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		
 		
 	}
 

@@ -14,7 +14,6 @@ public class ClientConnect {
 	public ClientConnect() {
 		try {
 			s= new Socket("127.0.0.1",3456);//本机地址，回车地址
-		System.out.println(s);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -40,16 +40,17 @@ public class ClientConnect {
 				  
 				  
 				  if(mess.getMessageType().equals(Message.message_LoginSuccess)){
-					  loginSuccess=true;
+					  
 					 System.out.println(user.getUserName()+"µÇÂ½³É¹¦");
 					  hmSocket.put(user.getUserName(),s);
 					  new ChlientReceiverThread(s).start();
 				  }
 						
-        	 } catch (IOException e) {
+        	 } catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();{
 					
 				}
+				return mess;
         	 } 
         	 
         	 catch (ClassNotFoundException e) {

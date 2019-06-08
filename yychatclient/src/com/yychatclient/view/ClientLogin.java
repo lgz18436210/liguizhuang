@@ -27,7 +27,6 @@ import com.yychatserver.controller.ClientConnect;
 public class ClientLogin extends JFrame implements ActionListener{
 	public static HashMap hmFriendlist=new HashMap<String,FriendList>();
 	JLabel jlbl1;
-	
 	JTabbedPane jtp1;
 	JPanel jp2,jp3,jp4;
 	JLabel jlbl2,jlbl3,jlbl4,jlbl5;
@@ -35,15 +34,11 @@ public class ClientLogin extends JFrame implements ActionListener{
 	JPasswordField jpf1;
 	JButton jb4;
 	JCheckBox jcb1,jcb2;
-	
-	
 	JButton jb1,jb2,jb3;
 	JPanel jp1;
-	
 	public ClientLogin() {
 		jlbl1=new JLabel(new ImageIcon("images/tou.gif"));
 		this.add(jlbl1,"North");
-		
 		jp2=new JPanel(new GridLayout(3,3));
 		jp3=new JPanel();jp4=new JPanel();
 		jlbl2=new JLabel("YY号码",JLabel.CENTER);jlbl3=new JLabel("YY密码",JLabel.CENTER);
@@ -60,61 +55,49 @@ public class ClientLogin extends JFrame implements ActionListener{
 		jtp1=new JTabbedPane();
 		jtp1.add(jp2,"YY号码");jtp1.add(jp3,"手机号码");jtp1.add(jp4,"电子邮箱");
 		this.add(jtp1);
-		
 		jb1=new JButton(new ImageIcon("images/denglu.gif"));
 		jb1.addActionListener(this);
 		jb2=new JButton(new ImageIcon("images/zhuce.gif"));
 		jb3=new JButton(new ImageIcon("images/quxiao.gif"));
 		jp1=new JPanel();
 		jp1.add(jb1);jp1.add(jb2);jp1.add(jb3);
-		this.add(jp1,"South");
-		
-		
+		this.add(jp1,"South");		
 		this.setSize(350,240);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-		
-		
-		
 }
-
-	
 	public static void main(String[] args) {
 		ClientLogin ClientLogin=new ClientLogin();
-
 	}
-
-
-	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==jb1) {
 			String userName = jtf1.getText().trim();
 			String password=new String(jpf1.getPassword());
-			
-			User user=new User();
+			User user=new User();//对象放在堆内存，引用变量放在栈内存
 			user.setUserName(userName);
 			user.setPassword(password);
-			
-			boolean loginSuccess=new ClientConnect().loginValidate(user);
-			
-			
-			if(loginSuccess){
-		     FriendList friendList=new FriendList(userName);
+			//boolean loginSuccess=new ClientConnect().loginValidate(user);
+			Message mess=new ClientConnect().loginValidateFromDB(user);
+			//if(loginSuccess){
+			if(mess.getMessageType().equals(Message.message_LoginSuccess)) {
+		     //保存FriendList对象
+				String friendList=mess.getContent();
+				//FriendList friendList=new FriendList(userName);构造方法需要拿到好友的名字
+				FriendList friendList=new FriendList(userName,friendString);//构造方法需要拿到好友的名字
 		     hmFriendlist.put(userName,friendList);
-		     
 		     //第一步向服务器发送获取在线用户信息的请求（）Message)
-		     Message mess=new Message();
-			mess.setSender(userName);
-	           mess.setReceiver("Server");
-	            mess.setMessageType(Message.message_RequestOnlineFriend);
+		     Message mess1=new Message();
+			mess1.setSender(userName);
+	           mess1.setReceiver("Server");
+	            mess1.setMessageType(Message.message_RequestOnlineFriend);
 	            	Socket s=(Socket)ClientConnect.hmSocket.get(userName);
 		     ObjectOutputStream oss;
 		     try{
 		    	 oss=new ObjectOutputStream(s.getOutputStream());
-		    	 oss.writeObject(mess);
+		    	 oss.writeObject(mess1);
 		     }
 		     catch (IOException e1){
-		    e1.printStackTrace();
+		     e1.printStackTrace();
 		     }
 		     this.dispose();
 		     }else{
